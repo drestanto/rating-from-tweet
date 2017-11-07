@@ -23,5 +23,6 @@ def crawler_operator(restaurant):
             tweet_data_collection.insert(data)
 
 
-crawler_operator("KFC");
-crawler_operator("McDonalds")
+crawler_operator("KFC Indonesia");
+crawler_operator("Eatboss Bandung")
+crawler_operator("Warung Pasta");
