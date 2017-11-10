@@ -3,17 +3,16 @@ from data_service.mongo_accessor import TweetDataMongoAccessorSingleton
 
 
 
-def crawler_operator(restaurant):
+def crawler_operator(restaurant_key, restaurant_query):
     print("")
     print("")
-    print("Crawling "+restaurant)
+    print("Crawling "+restaurant_key + "  with key word " + restaurant_query)
     print("")
     print("")
     tweet_data = TweetDataMongoAccessorSingleton.getInstance()
     tweet_data_collection = tweet_data.coll
-    restaurant_key = restaurant
     crawler = CrawlerService()
-    message = crawler.crawl(restaurant_key)
+    message = crawler.crawl(restaurant_query)
     for tweet in message:
         if (tweet_data_collection.find({'message':tweet.text}).count() == 0):
             print(tweet.text)
@@ -22,7 +21,11 @@ def crawler_operator(restaurant):
             data['message'] = tweet.text
             tweet_data_collection.insert(data)
 
+def read_query_file():
+     query_file = open("resto_query.txt","r")
+     for line in query_file:
+         restaurant_key, restaurant_query = line.split("|")
+         restaurant_query = restaurant_query.replace("\n","")
+         crawler_operator(restaurant_key,restaurant_query)
 
-crawler_operator("KFC Indonesia");
-crawler_operator("Eatboss Bandung")
-crawler_operator("Warung Pasta");
+read_query_file()
